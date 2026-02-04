@@ -1,80 +1,74 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-    <!-- Исправленная ссылка на библиотеку -->
-    <script src="https://cdnjs.cloudflare.com"></script>
-    <style> 
-        body { margin: 0; overflow: hidden; background: #000a1a; } 
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NY</title>
+    <!-- Используем другой проверенный источник библиотеки -->
+    <script src="https://cdn.jsdelivr.net"></script>
+    <style>
+        body { margin: 0; padding: 0; overflow: hidden; background-color: #000a1a; }
+        canvas { display: block; }
     </style>
 </head>
 <body>
-<script>
-let flakes = [];
-let frame = 0;
+    <script>
+        let flakes = [];
+        let frame = 0;
 
-function setup() {
-  createCanvas(windowWidth, windowHeight);
-  // Создаем снежинки
-  for (let i = 0; i < 60; i++) {
-    flakes.push({x: random(width), y: random(height), dy: random(1, 3)});
-  }
-}
+        function setup() {
+            createCanvas(windowWidth, windowHeight);
+            for (let i = 0; i < 60; i++) {
+                flakes.push({ x: random(width), y: random(height), dy: random(1, 3) });
+            }
+        }
 
-function draw() {
-  background("#000a1a");
-  frame++;
+        function draw() {
+            background("#000a1a");
+            frame++;
 
-  // 1. Луна
-  fill("#fff9c4");
-  noStroke();
-  let moonSize = 70 + sin(frame * 0.1) * 5;
-  ellipse(70, 70, moonSize);
+            // 1. Луна
+            fill("#fff9c4");
+            noStroke();
+            ellipse(70, 70, 70 + sin(frame * 0.05) * 5);
 
-  // 2. Сани
-  textSize(30);
-  let sleighX = width - (frame * 3 % (width + 400));
-  text("🦌🛷💨", sleighX, 80);
+            // 2. Сани
+            textSize(32);
+            let sleighX = width - (frame * 2 % (width + 300));
+            text("🦌🛷💨", sleighX, 100);
 
-  // 3. Елка (центрируем по ширине экрана)
-  let treeX = width / 2;
-  let treeY = height - 50;
+            // 3. Елка
+            let tx = width / 2;
+            let ty = height - 50;
+            fill("#3d2b1f");
+            rect(tx - 15, ty - 40, 30, 40);
+            fill("#004d1a");
+            triangle(tx - 100, ty - 40, tx + 100, ty - 40, tx, ty - 180);
+            triangle(tx - 80, ty - 110, tx + 80, ty - 110, tx, ty - 220);
+            triangle(tx - 60, ty - 170, tx + 60, ty - 170, tx, ty - 260);
 
-  fill("#3d2b1f"); // Ствол
-  rect(treeX - 15, treeY - 40, 30, 40);
-  
-  fill("#004d1a"); // Хвоя (нижний ярус)
-  triangle(treeX - 100, treeY - 40, treeX + 100, treeY - 40, treeX, treeY - 180);
-  // Средний ярус
-  triangle(treeX - 80, treeY - 100, treeX + 80, treeY - 100, treeX, treeY - 220);
-  // Верхний ярус
-  triangle(treeX - 60, treeY - 160, treeX + 60, treeY - 160, treeX, treeY - 260);
-  
-  // 4. Звезда (мигающая)
-  fill(frame % 20 < 10 ? "gold" : "white");
-  push();
-  translate(treeX, treeY - 270);
-  // Рисуем простую звезду через два треугольника
-  triangle(-15, 5, 15, 5, 0, -20);
-  rotate(PI);
-  triangle(-15, 5, 15, 5, 0, -20);
-  pop();
+            // 4. Звезда
+            fill(frame % 30 < 15 ? "gold" : "white");
+            push();
+            translate(tx, ty - 270);
+            for (let i = 0; i < 2; i++) {
+                triangle(-15, 5, 15, 5, 0, -20);
+                rotate(PI);
+            }
+            pop();
 
-  // 5. Снег
-  fill(255);
-  for (let f of flakes) {
-    ellipse(f.x, f.y, 3);
-    f.y += f.dy;
-    if (f.y > height) {
-      f.y = -10;
-      f.x = random(width);
-    }
-  }
-}
+            // 5. Снег
+            fill(255);
+            for (let f of flakes) {
+                ellipse(f.x, f.y, 3);
+                f.y += f.dy;
+                if (f.y > height) f.y = -10;
+            }
+        }
 
-// Чтобы елка не ломалась при повороте телефона
-function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
-}
-</script>
+        function windowResized() {
+            resizeCanvas(windowWidth, windowHeight);
+        }
+    </script>
 </body>
 </html>
